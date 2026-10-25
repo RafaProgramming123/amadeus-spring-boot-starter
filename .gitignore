@@ -4,3 +4,7 @@ target/
 .vscode/
 .DS_Store
 .env
+
+# local credentials, never commit
+token.txt
+settings.xml
