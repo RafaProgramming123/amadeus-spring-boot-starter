@@ -26,10 +26,10 @@ jobs:
           gpg-passphrase: GPG_PASSPHRASE
 
       - name: Set version from tag (v0.2.0 -> 0.2.0)
-        run: mvn -B versions:set -DnewVersion="${GITHUB_REF_NAME#v}" -DgenerateBackupPoms=false
+        run: ./mvnw -B versions:set -DnewVersion="${GITHUB_REF_NAME#v}" -DgenerateBackupPoms=false
 
       - name: Test and publish
-        run: mvn -B -Prelease deploy
+        run: ./mvnw -B -Prelease deploy
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}

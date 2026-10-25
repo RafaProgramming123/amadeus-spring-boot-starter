@@ -109,8 +109,8 @@ AmadeusRestClientCustomizer amadeusHeaders() {
 This is a standalone single-module project (Java 21, no parent POM).
 
 ```bash
-mvn verify      # build + tests
-mvn install     # into your local ~/.m2, usable by your other projects
+./mvnw verify      # build + tests (mvnw.cmd on Windows)
+./mvnw install     # into your local ~/.m2, usable by your other projects
 ```
 
 Run `./rename.sh <your-github-username> "<Your Full Name>"` once before the first build, to
@@ -129,5 +129,5 @@ Central portal.
 To rehearse the release build locally without uploading:
 
 ```bash
-mvn -Prelease verify     # needs a GPG key: signing runs in the verify phase
+./mvnw -Prelease verify     # needs a GPG key: signing runs in the verify phase
 ```
