@@ -1,0 +1,36 @@
+# Publishes the starter to Maven Central when you push a tag like v0.1.0.
+#
+# Repository secrets needed (Settings -> Secrets and variables -> Actions):
+#   CENTRAL_USERNAME / CENTRAL_PASSWORD  user token from central.sonatype.com -> Account -> Generate User Token
+#   GPG_PRIVATE_KEY                      gpg --armor --export-secret-keys <KEY_ID>
+#   GPG_PASSPHRASE                       passphrase of that key
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          server-id: central
+          server-username: CENTRAL_USERNAME
+          server-password: CENTRAL_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
+      - name: Set version from tag (v0.2.0 -> 0.2.0)
+        run: mvn -B versions:set -DnewVersion="${GITHUB_REF_NAME#v}" -DgenerateBackupPoms=false
+
+      - name: Test and publish
+        run: mvn -B -Prelease deploy
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
